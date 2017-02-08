@@ -113,13 +113,13 @@
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
       var rows = this.rows();
-      var r = 0;
-      var c = 0;
+      var y = 0;
+      var x = 0;
       var columncounter = 0;
-      for(c = 0; c < rows.length; c++){
+      for(x = 0; x < rows.length; x++){
         columncounter = 0;
-        for(r = 0; r < rows.length; r++){
-          if(rows[r][c]){
+        for(y = 0; y < rows.length; y++){
+          if(rows[y][x]){
             columncounter++;
           }
           if(columncounter > 1){
@@ -137,12 +137,29 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      return false; // fixmejon
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      for (var slice = 0; slice < rows.length*2-1; ++slice) {
+        var z = slice < rows.length ? 0 : slice - rows.length + 1;
+        var counter = 0;
+        for (var j = z; j <= slice - z; ++j) {
+          var y=j;
+          var x=(rows.length-1)-(slice-j);
+          if(rows[y][x]){
+            counter++;
+          }
+          if(counter > 1){
+            return true;
+          }
+        }
+        console.log();
+      }
+
+      return false;
     },
 
 
@@ -157,8 +174,24 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
-    }
+      var rows = this.rows();
+      for (var slice = 0; slice <= 2 * (rows.length - 1); ++slice) {
+          var yMin = Math.max(0, slice - rows.length + 1);
+          var yMax = Math.min(rows.length - 1, slice);
+          var counter = 0;
+          for (var y = yMin; y <= yMax; ++y) {
+              var x = slice - y;
+              if(rows[y][x]){
+                counter++;
+              }
+              if(counter > 1){
+                return true;
+              }
+          }
+          
+      }
+      return false;
+    },
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
