@@ -31,30 +31,47 @@ window.findNRooksSolution = function(n) {
     }
   }
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution.rows()));
   return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  /*var solutionCount = f(1, new Board({"n": n})); //fixme
+  var solutionCount = 0;
+  console.log("n:", n);
+  var debugboards = [];
 
-  function f(move, board) {
-    var solutionCount = 0;
-    // for each position on the board
+  if(n === 1){
+    return 1;
+  }
+
+  function func (pieces, board){
+    var newboard;
     for(var y = 0; y < n; y++){
-      for (var x = 0; x < n; x++) {
-        // ensure this space is empty
-        if(board.attributes[y][x]){
-          break;
+      for(var x = 0; x < n; x++){
+        newboard = new Board(board.rows());
+        console.log('n:', n, 'y:', y, 'x:', x, 'pieces:', pieces, 'new board:', board.rows());
+        // Skip spaces that are already filled
+        if(newboard.attributes[y][x] === 1){
+          continue;
+        }
+        newboard.attributes[y][x] = 1;
+        // Skip spaces that have a conflict
+        if(newboard.hasAnyRooksConflicts()){
+          continue;
+        }
+        if(pieces < n){
+          func(pieces + 1, newboard);
+        } else if(pieces === n){
+          solutionCount++;
         }
       }
     }
-    return solutionCount;
-  };
+  }
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;*/
+  func(0, new Board({'n' : n}));
+  return solutionCount;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
