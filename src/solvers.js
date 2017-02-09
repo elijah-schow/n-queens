@@ -16,54 +16,45 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = []; //fixme;[]
+  var solution = new Board({'n' : n}); // fixme
 
-  
+  if(n === 1){
+    return [[1]];
+  }
+
+  for(var y = 0; y < n; y++){
+    for(var x = 0; x < n; x++){
+      solution.attributes[y][x] = 1;
+      if(solution.hasAnyRooksConflicts()){
+        solution.attributes[y][x] = 0;
+      }
+    }
+  }
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = f(0, new Board({"n": n})); //fixme
-  
+  /*var solutionCount = f(1, new Board({"n": n})); //fixme
+
   function f(move, board) {
-    var result = 0;
-    // for each position on the given board
+    var solutionCount = 0;
+    // for each position on the board
     for(var y = 0; y < n; y++){
       for (var x = 0; x < n; x++) {
-        console.log("BEGIN X:", x, "Y:", y, "MOVE:", move, "N:", n, "SOLUTION:", result);
-        // if position is empty
-        if (!board.attributes[y][x]) {
-          // make a new copy of the given board
-          var newBoard = new Board(board.rows());
-          // add a piece at position to the new board
-          newBoard.attributes[y][x] = 1;
-          // if there are no conflicts in the new board
-          if (!newBoard.hasAnyRooksConflicts()) {
-            // if move is equal or grater than n
-            if (move >= n - 1) {
-              result++;
-              console.log('Result!');
-            } else {
-              result += f(move + 1, newBoard);
-              console.log('Recursion!');
-            }
-          } else {
-          	console.log('Conflict!');
-          }
-        } else {
-        	console.log('Already Filled!');
-        	// (implied) if there arre conflicts, end this branch of the decision tree
+        // ensure this space is empty
+        if(board.attributes[y][x]){
+          break;
         }
       }
     }
-    console.log("BEGIN X:", x, "Y:", y, "MOVE:", move, "N:", n, "SOLUTION:", result);
-    return result;
+    return solutionCount;
   };
 
-  return solutionCount;
+  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  return solutionCount;*/
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
