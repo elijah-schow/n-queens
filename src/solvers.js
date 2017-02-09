@@ -39,22 +39,31 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
   var board = new Board({'n': n});
+  var pieces = 0;
 
   if (n === 1) {
     return 1;
   }
 
-  trypiece(0, 0);
-
-  function trypiece(y, x){
-    board.togglePiece(y, x);
-    if(board.hasAnyRooksConflicts()){
-      
-    } else {
-      trypiece();
+  (function trypiece() {
+    for(var y = 0; y < n; y++){
+      for(var x = 0; x < n; x++) {
+        board.togglePiece(y, x);
+        pieces += 1;
+        if (!board.hasAnyRooksConflicts()) {
+          if(pieces === n){
+            solutionCount++;
+          } else {
+            trypiece();
+          }
+        }
+        board.togglePiece(y, x);
+        pieces -= 1;
+      }
     }
-    board.togglePiece(y, x);
-  }
+  })();
+
+  console.log('n:', n);
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
