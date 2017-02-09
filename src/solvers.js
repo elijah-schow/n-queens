@@ -27,44 +27,42 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionCount = f(0, new Board({"n": n})); //fixme
-  console.log("NEW RUN n: ", n);
   
   function f(move, board) {
-
     var result = 0;
-    if(move > n){
-      return 0;
-    }
     // for each position on the given board
     for(var y = 0; y < n; y++){
       for (var x = 0; x < n; x++) {
-        console.log("X:", x, "Y:", y, "MOVE:", move, "N:", n, "SOLUTION:", result);
+        console.log("BEGIN X:", x, "Y:", y, "MOVE:", move, "N:", n, "SOLUTION:", result);
         // if position is empty
-        if (!board.get(y)[x]) {
+        if (!board.attributes[y][x]) {
           // make a new copy of the given board
           var newBoard = new Board(board.rows());
-          console.log("OLDBOARD", board.rows());
-          console.log("NEWBOARD: ", newBoard);
           // add a piece at position to the new board
-          newBoard.set(y)[x] = 1;
+          newBoard.attributes[y][x] = 1;
           // if there are no conflicts in the new board
           if (!newBoard.hasAnyRooksConflicts()) {
             // if move is equal or grater than n
-            if (move === n - 1) {
+            if (move >= n - 1) {
               result++;
+              console.log('Result!');
             } else {
               result += f(move + 1, newBoard);
+              console.log('Recursion!');
             }
+          } else {
+          	console.log('Conflict!');
           }
-          // (implied) if there arre conflicts, end this branch of the decision tree
+        } else {
+        	console.log('Already Filled!');
+        	// (implied) if there arre conflicts, end this branch of the decision tree
         }
       }
     }
-
+    console.log("BEGIN X:", x, "Y:", y, "MOVE:", move, "N:", n, "SOLUTION:", result);
     return result;
   };
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
 
